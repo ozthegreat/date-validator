@@ -1,5 +1,5 @@
-Date Validator Class
-====================
+Date Validator Function
+=======================
 
 Simple PHP Date Validator class for older PHP
 
