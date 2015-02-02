@@ -2,17 +2,17 @@
 
 	/**
 	 * Validates a date with the inputed format.
-	 * Version 1.0
-	 * 
+	 * Version 1.1
+	 *
 	 * @param type $date
 	 * @param type $format
 	 * @return boolean
 	 */
-	function validate_date( $date = null, $format = 'YYYY-MM-DD', $debug = FALSE ){
-
+	function validate_date($date = null, $format = 'YYYY-MM-DD')
+	{
 		// Return FALSE if $date empty
-		if( ! $date )
-			return FALSE;
+		if( empty( $date ) )
+			return false;
 
 		// $date is trimed
 		$date = trim( $date );
@@ -21,12 +21,12 @@
 		$format = empty( $format ) ? 'YYYY-MM-DD' : strtoupper( $format );
 
 		// $format is 10 char in length and contains all the required chars
-		if( strlen( $format ) != 10 ||
-		    strpos( $format, 'YYYY' ) === FALSE ||
-		    strpos( $format, 'MM' ) === FALSE ||
-		    strpos( $format, 'DD' ) === FALSE
+		if ( strlen( $format ) != 10 ||
+		    strpos( $format, 'YYYY' ) === false ||
+		    strpos( $format, 'MM' ) === false ||
+		    strpos( $format, 'DD' ) === false
 		)
-			return FALSE;
+			return false;
 
 		// Get $format serparator
 		$date_seperator = str_replace( array( 'Y', 'M', 'D' ) , '', $format );
@@ -41,43 +41,37 @@
 		// Count $date_parts; Quicker than doing it inline
 		$date_parts_count = count( $date_parts );
 
-		// Cycle through $date_parts, compare the length to the equivilent $format_parts length, set to var
-		for( $i = 0; $i < $date_parts_count; $i++ ){
-
-			// Check each datepart is a valid in
-			if( ! filter_var( ( int ) $date_parts[ $i ], FILTER_VALIDATE_INT ) )
-				return FALSE;
+		// Cycle through $date_parts, compare the length to the equivalent $format_parts length, set to var
+		for ( $i = 0; $i < $date_parts_count; $i++ )
+		{
+			// Check each datepart is a valid integer
+			if ( ! filter_var( ( int ) $date_parts[ $i ], FILTER_VALIDATE_INT ) )
+				return false;
 
 			// Compare $date_part length to equivilent $format_part length
-			if( strlen( $date_parts[ $i ] ) != strlen( $format_parts[ $i ] )  )
-				return FALSE;
+			if ( strlen( $date_parts[ $i ] ) != strlen( $format_parts[ $i ] )  )
+				return false;
 
 			// Set our variables so we check it's a valid date later
-			if( $format_parts[ $i ][0] == 'Y' ){
-
+			if ( 'Y' == $format_parts[ $i ][0] )
+			{
 				$year = $date_parts[ $i ];
-
-			} elseif( $format_parts[ $i ][0] == 'M' ){
-
-				$month = $date_parts[ $i ];
-
-			} elseif( $format_parts[ $i ][0] == 'D' ){
-
-				$day = $date_parts[ $i ];
-
 			}
-
+			elseif ( 'M' == $format_parts[ $i ][0] )
+			{
+				$month = $date_parts[ $i ];
+			}
+			elseif ( 'D' == $format_parts[ $i ][0] )
+			{
+				$day = $date_parts[ $i ];
+			}
 		}
 
-		// Finally, check it's a valid date
-		if( checkdate( $month, $day, $year ) ){
-
-			return TRUE;
-
-		} else {
-
-			return FALSE;
-
+		// Finally check it's a valid date
+		if ( ! checkdate( $month, $day, $year ) )
+		{
+			return false;
 		}
 
+		return true;
 	}
